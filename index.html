@@ -148,7 +148,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ac);outline-offs
  <h2 id="how">Как это работает</h2>
  <div class="how"><div class="c"><span class="e">🧹</span>Вид уборки</div><div class="c"><span class="e">🏷️</span>Цена заранее</div><div class="c"><span class="e">📍</span>Фото и адрес</div><div class="c"><span class="e">📥</span>Заявка в кабинет</div></div>
  <h2 id="prices-h">Каталог и цены</h2>
- <div class="c"><p style="margin:0 0 12px">Поддерживающая, генеральная, после ремонта и мойка окон: все цены в одном месте.</p><button class="btn" data-go="services">Открыть каталог →</button></div>
+ <div class="c"><p style="margin:0 0 12px">Поддерживающая, генеральная, после ремонта, окна и дополнительные услуги: все цены в одном месте.</p><button class="btn" data-go="services">Открыть каталог →</button></div>
  <h2 id="zone">Зона работы</h2>
  <div class="c"><h3 id="area"></h3><p style="margin:0" id="hours"></p><a class="btn s hid" id="callBtn" style="margin-top:10px"></a></div>
 </section>
@@ -242,18 +242,19 @@ var SB=!!(CFG.url&&CFG.key);if(SB)CFG.url=CFG.url.replace(/\/+$/,"");
 
 try{if(localStorage.getItem("theme")=="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}
 var SHAPES={sofa:"Диван",chair:"Кресло",stool:"Стул",mat:"Матрас",rug:"Ковёр",other:"Другое (пуф)"};
-var ICON={sofa:"🧽",chair:"✨",stool:"🪟",mat:"🧱",rug:"🧶",other:"🏢"};
+var ICON={sofa:"🧽",chair:"✨",stool:"🪟",mat:"🧱",rug:"🧶",other:"🏢",lamp:"💡"};
 var KINDS={friendly:"Дружелюбный",sleepy:"Сонный диван",funny:"Озорной диван",plain:"Мебель без лица и рук"};
 var CHCOL=["#4c5058","#b9bec8","#cdbba8","#9fb3cc","#a9c6b2","#d6b3c0"];
 var ACC=["#2563eb","#8b5cf6","#2f9e7a","#f97316","#db2777","#1e2f4d"];
 var DEF={brand:"СияниеPRO",city:"Москва",phone:"",tagline:"Чистота,\nкоторая сияет.",
  area:"Москва и Московская область",hours:"Ежедневно с 9:00 до 20:00. Приезжаю со своей химией и инвентарём.",
- accent:"#0ea5e9",trip:0,dirty:20,min:2500,out:500,
+ accent:"#0ea5e9",trip:0,dirty:20,min:0,out:0,
  items:[{k:"keep",n:"Поддерживающая",shape:"sofa",two:0,m2:[150,150],s:[["м²",0]]},
   {k:"gen",n:"Генеральная",shape:"chair",two:0,m2:[250,250],s:[["м²",0]]},
   {k:"rem",n:"После ремонта",shape:"mat",two:0,m2:[300,300],s:[["м²",0]]},
-  {k:"win",n:"Окна",shape:"stool",two:0,s:[["Створка",600]]}],
- ext:[],
+  {k:"win",n:"Окна",shape:"stool",two:0,s:[["Створка",600]]},
+  {k:"lamp",n:"Люстры",shape:"lamp",two:0,s:[["Люстра",150]]}],
+ ext:[["Холодильник внутри",650],["Микроволновка внутри",500],["Духовка внутри",800],["Стиральная машина внутри",500],["Вытяжка",500]],
  slots:{from:9,to:20,len:3,days:14,lead:3,crews:1,off:[],closed:[]},
  game:{on:false,disc:5,texts:["Я всё помню. Особенно тот кофе.","Ну вот, уже лучше!","Ещё чуть-чуть — и можно обниматься.","Чисто! Обнимашки!"]},
  char:{color:"#d6b3c0",kind:"friendly",lines:true}};
@@ -604,11 +605,11 @@ function cartRender(){
   +(t.d?'<div class="sum"><span>Скидка за игру −'+t.d+'%</span><span>−'+rub(t.dv)+'</span></div>':'')
   +(t.top?'<div class="sum"><span>Доплата до минимума</span><span>+'+rub(t.top)+'</span></div>':'')
   +(t.out?'<div class="sum"><span>За пределами города</span><span>+'+rub(t.out)+'</span></div>':'')
-  +'<div class="sum"><span>Выезд по городу</span><span>'+(t.trip?rub(t.trip):'Бесплатно')+'</span></div>'
-  +'<label class="ck" style="margin-top:6px"><input type="checkbox" id="outc"'+(CART.out?' checked':'')+'>Выезд за пределы города (+'+rub(SET.out)+')</label>'
+  +'<div class="sum"><span>Выезд'+(SET.out?' по городу':'')+'</span><span>'+(t.trip?rub(t.trip):'Бесплатно')+'</span></div>'
+  +(SET.out?'<label class="ck" style="margin-top:6px"><input type="checkbox" id="outc"'+(CART.out?' checked':'')+'>Выезд за пределы города (+'+rub(SET.out)+')</label>':'')
   +'<div class="sum big"><span>Предварительно</span><b>'+(t.total?rub(t.total):'По фото')+'</b></div>'
   +(t.pf&&t.total?'<p class="note" style="margin:6px 0 0">+ позиции «по фото» оценим отдельно.</p>':'')
-  +'<p class="note" style="margin:6px 0 0">Минимальный заказ — '+rub(SET.min)+'.</p>'
+  +(SET.min?'<p class="note" style="margin:6px 0 0">Минимальный заказ — '+rub(SET.min)+'.</p>':'')
   +'<button class="btn" id="tocheckout" style="margin-top:14px">Оформить заявку →</button><p class="note" style="margin:10px 0 0;text-align:center">Итоговую цену и время подтвердим по телефону.</p></div>';
  if(SET.game.on&&!t.d)h+='<div class="c"><div class="gt"><span class="em">🧽</span><div><h3 style="margin:0">Хотите скидку '+SET.game.disc+'%?</h3><p>Почистите диван в мини-игре.</p></div></div><button class="btn s" data-go="game" style="margin-top:10px">Поиграть</button></div>';
  el.innerHTML=h}
@@ -740,14 +741,14 @@ $("shx").onclick=function(){$("sheet").classList.add("hid")};
 /* ================= услуги / тема / установка ================= */
 function svcRender(){
  var core=ITEMS.filter(function(x){return!x.photo}),oth=ITEMS.filter(function(x){return x.photo});
- $("sfacts").innerHTML='<span>Минимальный заказ '+rub(SET.min)+'</span><span>Выезд по городу: '+(SET.trip?rub(SET.trip):'бесплатно')+'</span><span>Запись на удобное время</span>';
+ $("sfacts").innerHTML=(SET.min?'<span>Минимальный заказ '+rub(SET.min)+'</span>':'<span>Без минимального заказа</span>')+'<span>Выезд'+(SET.out?' по городу':'')+': '+(SET.trip?rub(SET.trip):'бесплатно')+'</span><span>Запись на удобное время</span>';
  $("svc").innerHTML=core.map(function(x){if(x.m2)return'<div class="c"><div class="sch"><div class="sci">'+(ICON[x.shape]||"")+'</div><div class="sct"><b>'+esc(x.n)+'</b><small>'+(x.m2[0]==x.m2[1]?'':'от ')+x.m2[0]+' ₽ за м²</small></div></div><div class="vr"><span>Цена за м²</span><b>'+(x.m2[0]==x.m2[1]?x.m2[0]:x.m2[0]+'–'+x.m2[1])+' ₽</b></div><div class="vr"><span class="mut">Например, 50 м²</span><span class="mut">'+(x.m2[0]==x.m2[1]?rub(50*x.m2[0]):rub(50*x.m2[0])+' – '+rub(50*x.m2[1]))+'</span></div><button class="btn s" data-k2="'+esc(x.k)+'" style="margin-top:12px">Рассчитать · '+esc(x.n.toLowerCase())+' →</button></div>';var mn=Math.min.apply(null,x.s.map(function(z){return z[1]}));
   return'<div class="c"><div class="sch"><div class="sci">'+(ICON[x.shape]||"")+'</div><div class="sct"><b>'+esc(x.n)+'</b><small>от '+rub(mn)+'</small></div></div>'
   +x.s.map(function(z){return'<div class="vr"><span>'+esc(z[0])+'</span><b>'+rub(z[1])+'</b></div>'}).join("")
   +(x.two?'<div class="vr"><span class="mut">С двух сторон</span><span class="mut">+'+x.two+'%</span></div>':'')
   +'<button class="btn s" data-k2="'+esc(x.k)+'" style="margin-top:12px">Рассчитать · '+esc(x.n.toLowerCase())+' →</button></div>'}).join("")
   +oth.map(function(x){return'<div class="c"><div class="sch"><div class="sci">'+(ICON[x.shape]||"⋯")+'</div><div class="sct"><b>Большие объекты</b><small>Цена по фото и площади</small></div></div><p style="margin:0 0 4px">Офисы, коттеджи, коммерческие помещения и объекты после стройки. Опишите объект, укажите площадь и приложите фото: назовём цену.</p><button class="btn s" data-k2="'+esc(x.k)+'" style="margin-top:8px">Отправить фото →</button></div>'}).join("");
- $("terms").innerHTML='<div class="sum"><span>Минимальный заказ</span><b>'+rub(SET.min)+'</b></div><div class="sum"><span>Выезд по городу</span><b>'+(SET.trip?rub(SET.trip):'Бесплатно')+'</b></div><div class="sum"><span>За пределами города</span><b>+'+rub(SET.out)+'</b></div><div class="sum"><span>Сильные загрязнения</span><b>+'+SET.dirty+'%</b></div><p class="note" style="margin:8px 0 0">'+esc(SET.area)+'. '+esc(SET.hours)+'</p>'}
+ $("terms").innerHTML='<div class="sum"><span>Минимальный заказ</span><b>'+(SET.min?rub(SET.min):'Нет')+'</b></div><div class="sum"><span>Выезд'+(SET.out?' по городу':' по Москве и области')+'</span><b>'+(SET.trip?rub(SET.trip):'Бесплатно')+'</b></div>'+(SET.out?'<div class="sum"><span>За пределами города</span><b>+'+rub(SET.out)+'</b></div>':'')+'<div class="sum"><span>Сильные загрязнения</span><b>+'+SET.dirty+'%</b></div><p class="note" style="margin:8px 0 0">'+esc(SET.area)+'. '+esc(SET.hours)+'</p>'}
 $("svc").onclick=function(e){var b=e.target.closest("[data-k2]");if(b){cur=b.dataset.k2;editIdx=null;go("home")}};
 function ctRender(){[].forEach.call(document.querySelectorAll(".bn2"),function(e){e.textContent=SET.brand});$("cta").textContent=SET.area;
  $("ctb").textContent=SET.phone?"Звоните или оставьте заявку":"Контакты появятся здесь";
